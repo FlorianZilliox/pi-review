@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mid-PI Review</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <h1>Mid-PI Review</h1>
+            <button class="help-btn" id="helpBtn">Voir les regles</button>
+        </div>
+        <p class="subtitle">Dashboard d'avancement des Epics</p>
+
+        <!-- Modal -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <button class="modal-close" id="modalClose">&times;</button>
+                <h2>Regles d'analyse</h2>
+
+                <h3>Indicateur equipe</h3>
+                <p>Alerte sur le risque de ne pas tout livrer d'ici la fin du quarter.</p>
+                <table class="rule-table">
+                    <tr>
+                        <th>Indicateur</th>
+                        <th>Signification</th>
+                    </tr>
+                    <tr>
+                        <td><span class="indicator-inline red"></span>Rouge</td>
+                        <td><strong>Risque élevé</strong> — Le rythme actuel ne permettra probablement pas de tout livrer. Action corrective nécessaire.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="indicator-inline orange"></span>Orange</td>
+                        <td><strong>Attention</strong> — L'avancement est en retard par rapport aux attentes à mi-PI. À surveiller.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="indicator-inline green"></span>Vert</td>
+                        <td><strong>En bonne voie</strong> — L'équipe progresse au rythme attendu pour livrer en fin de quarter.</td>
+                    </tr>
+                </table>
+
+                <h3>Ce qui déclenche une alerte</h3>
+                <p><strong>Peu de tickets terminés</strong> — Moins de la moitié du travail identifié est fait à mi-parcours</p>
+                <p><strong>Trop d'Epics non démarrées</strong> — Une grande partie du backlog n'a pas encore commencé</p>
+                <p><strong>Scope mal défini</strong> — Beaucoup d'Epics sont encore "À cadrer"</p>
+                <p><strong>Dispersion</strong> — Beaucoup d'Epics en parallèle mais aucune terminée</p>
+
+                <h3>Points d'attention Epic</h3>
+                <p>Une Epic est signalée si elle présente une incohérence :</p>
+                <table class="rule-table">
+                    <tr>
+                        <th>Situation</th>
+                        <th>Problème</th>
+                    </tr>
+                    <tr>
+                        <td>En cours mais peu avancée</td>
+                        <td>Démarrée mais bloquée ou ralentie</td>
+                    </tr>
+                    <tr>
+                        <td>À cadrer avec des tickets</td>
+                        <td>Travail commencé sans cadrage finalisé</td>
+                    </tr>
+                    <tr>
+                        <td>Backlog mais bien avancée</td>
+                        <td>Statut à mettre à jour</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Upload zone -->
+        <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">+</div>
+            <input type="file" id="csvInput" accept=".csv">
+            <p class="upload-text">
+                <strong>Cliquer pour charger</strong> ou glisser-déposer le fichier CSV
+            </p>
+        </div>
+
+        <!-- Info box -->
+        <div class="info-box hidden" id="infoBox">
+            <div class="info-box-title">Extraction chargée</div>
+            <div class="info-box-content" id="extractionInfo"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs hidden" id="navTabs"></div>
+
+        <!-- Content -->
+        <div id="content"></div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
