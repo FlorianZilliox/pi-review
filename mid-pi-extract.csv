@@ -1,89 +1,95 @@
-Equipe;Epic;Titre;Statut;Total;Done;EnCours
-AUTOMATISER;AUT-25;RUN Q1 Activation;En cours;0;0;0
-AUTOMATISER;AUT-453;AP Perf clics - developpements;Backlog;18;2;4
-AUTOMATISER;AUT-454;AP Perf DTW - mise a dispo donnees;Backlog;0;0;0
-AUTOMATISER;AUT-461;AP Perf DTW - mise a dispo donnees;Backlog;2;0;0
-AUTOMATISER;AUT-462;AP Perf DTS - mise a dispo donnees;Backlog;0;0;0
-AUTOMATISER;AUT-467;AP Meteoflex open data;Backlog;7;7;0
-AUTOMATISER;AUT-501;RUN - Automatiser;Backlog;17;14;1
-AUTOMATISER;AUT-503;Fusion TVS/Streaming dev AP PSL;Backlog;9;9;0
-MONETISER;DM-443;Optimisation socio demo lot 1 tests;En cours;0;0;0
-MONETISER;DM-438;Netflix - Segmentation deterministe;Backlog;3;0;1
-MONETISER;DM-439;Citron TRE;Backlog;13;11;0
-MONETISER;DM-440;Migration Audience Manager;Backlog;10;8;2
-MONETISER;DM-441;Cadrage CDP Composable - Discovery;Backlog;0;0;0
-MONETISER;DM-442;Referentiel des cibles;Backlog;7;4;2
-MONETISER;DM-445;Thematik by AI sur TF1 Info;Backlog;3;0;0
-MONETISER;DM-465;RUN - Monetiser;Backlog;12;10;1
-MONETISER;DM-481;Midtail - Enrichissement SIREN;Backlog;0;0;0
-MONETISER;DM-511;NETFLIX - Adaptation code;Backlog;1;0;0
-ENGAGER;ENG-151;Recommandation de contenus dans Braze;En cours;8;7;0
-ENGAGER;ENG-166;TF1 info - Elections municipales;En cours;2;2;0
-ENGAGER;ENG-200;Tempo - Temps non productif;En cours;2;0;0
-ENGAGER;ENG-152;Reengager les utilisateurs J+90;A cadrer;7;2;1
-ENGAGER;ENG-153;Creer les dashboards;A cadrer;0;0;0
-ENGAGER;ENG-155;Integrer donnees NBA dans Braze;A cadrer;0;0;0
-ENGAGER;ENG-156;RUN - Donnees Pay Micropaiements;A cadrer;0;0;0
-ENGAGER;ENG-161;Synchronisation catalogues Braze;A cadrer;1;1;0
-ENGAGER;ENG-162;TF1 Info - Segmentation dynamique;A cadrer;11;7;0
-ENGAGER;ENG-167;PAY Premium - Reengagement;A cadrer;1;1;0
-ENGAGER;ENG-204;SSO Lot 2;A cadrer;3;2;1
-ENGAGER;ENG-168;RUN TF1 Info;Backlog;1;1;0
-ENGAGER;ENG-169;RUN TF1+;Backlog;5;5;0
-ENGAGER;ENG-190;RUN - Evolutions Braze;Backlog;2;2;0
-EXPOSER;DE-292;Enrichir GraphID - Micro Paiement;En cours;1;1;0
-EXPOSER;DE-295;APA x TAM V1 KPIs generiques;En cours;10;1;0
-EXPOSER;DE-160;Dashboard TF1+ pour Distribution;A cadrer;12;1;0
-EXPOSER;DE-291;Signaux affinite Amazon;A cadrer;2;0;0
-EXPOSER;DE-301;Migrer dashboard TechOps PowerBI;A cadrer;10;0;0
-EXPOSER;DE-302;Dashboard Pilotage diffusion;A cadrer;4;0;0
-EXPOSER;DE-303;Dashboard Survaleur onglet 4;A cadrer;6;2;0
-EXPOSER;DE-304;Dashboard Yield PowerBI;A cadrer;3;3;0
-EXPOSER;DE-305;Optimiser ressources PowerBI;A cadrer;0;0;0
-EXPOSER;DE-306;Alerting dashboards;A cadrer;1;1;0
-EXPOSER;DE-307;Migration DBT data quality GraphID;A cadrer;6;0;0
-EXPOSER;DE-293;APA Commerciaux;Backlog;5;0;0
-EXPOSER;DE-298;Hub x TAM fichiers;Backlog;1;0;0
-EXPOSER;DE-315;RUN Exposer;Backlog;37;29;1
-EXPOSER;DE-343;GraphID Reseaux Sociaux;Backlog;1;0;0
-IAML;DI-41;Migration tables RBAC;En cours;6;5;0
-IAML;DI-63;lib-connector industrialisation;En cours;27;17;0
-IAML;DI-497;Quick win reco Lot 1;En cours;8;0;2
-IAML;DI-625;MVP One Target Netflix;En cours;7;1;0
-IAML;DI-703;Explicabilite modele NCF;En cours;8;4;2
-IAML;DI-71;Architecture modeling Lot 1;A cadrer;6;3;0
-IAML;DI-624;Memoire dynamique recommandations;A cadrer;5;0;0
-IAML;DI-628;Industrialiser One Target Netflix;A cadrer;5;0;0
-IAML;DI-745;POC Astronomer;A cadrer;1;0;0
-IAML;DI-746;Monitoring Datadog;A cadrer;5;0;0
-IAML;DI-748;lib-dev-utils;A cadrer;0;0;0
-IAML;DI-766;Lib One Target V2;A cadrer;20;8;1
-IAML;DI-704;Quick win reco Lot 2;A Faire;5;0;0
-IAML;DI-747;Analyser AB tests;A Faire;3;1;0
-STACK DATA;DSD-1960;Refonte droits acces plateforme;En cours;9;6;0
-STACK DATA;DSD-1962;Revue Audit CI/CD;En cours;5;1;0
-STACK DATA;DSD-1963;Securite Azure;En cours;4;2;0
-STACK DATA;DSD-1994;Implementation Cnapp Wiz;En cours;1;0;0
-STACK DATA;DSD-1995;Securite CI/CD;En cours;11;2;1
-STACK DATA;DSD-2068;Cadrage Plateforme Composable;En cours;6;2;0
-STACK DATA;DSD-2084;Netflix Infrastructure;En cours;24;14;1
-STACK DATA;DSD-2086;Optimisation FINOPS Infra;En cours;14;7;0
-STACK DATA;DSD-2087;Bascule Auth Snowflake;En cours;0;0;0
-STACK DATA;DSD-2131;Purges donnees Snowflake;En cours;7;2;2
-STACK DATA;DSD-2132;RAW-TO-INT;En cours;17;7;1
-STACK DATA;DSD-2133;Snowflake FinOps;En cours;5;0;0
-STACK DATA;DSD-2134;Masking donnees Snowflake;En cours;0;0;0
-STACK DATA;DSD-2135;Citron Tre Infrastructure;En cours;5;0;0
-STACK DATA;DSD-2211;AP Perf DTW Infra;En cours;1;0;0
-STACK DATA;DSD-2245;AP Perf DTS Infra;En cours;0;0;0
-STACK DATA;DSD-2258;Snowflake Amelioration Continue;En cours;2;0;0
-STACK DATA;DSD-2311;Snowflake MCO/RUN;En cours;16;14;1
-STACK DATA;DSD-2349;Agentic AI Framework;En cours;19;6;6
-STACK DATA;DSD-2350;Data Plateforme MCO/RUN;En cours;37;17;9
-STACK DATA;DSD-2354;APA Stack Data;En cours;8;4;1
-STACK DATA;DSD-2355;Datadog migration monitoring;En cours;8;7;1
-STACK DATA;DSD-2380;DBT INFRA;En cours;6;1;0
-STACK DATA;DSD-2088;Pricing Dynamic;A Faire;0;0;0
-STACK DATA;DSD-2091;Infrastructure Stack Catchr;A Faire;0;0;0
-STACK DATA;DSD-1205;Jira CMDB MVP;Backlog;2;0;0
-STACK DATA;DSD-2393;Corriger ecarts terraform;Backlog;3;0;0
+Equipe;Epic;Titre;Statut;Total;Done;EnCours;Type;Composant
+AUTOMATISER;AUT-25;RUN Q1;En cours;0;0;0;;
+AUTOMATISER;AUT-453;AP Perf clics - développements;Backlog;19;5;3;;Autopilot
+AUTOMATISER;AUT-454;AP Perf DTW - mise à dispo des données;Backlog;0;0;0;;Autopilot
+AUTOMATISER;AUT-461;AP Perf DTW - mise à dispo des données;Backlog;4;2;0;Build;Octopus
+AUTOMATISER;AUT-462;AP Perf - Drive To Store : mise à dispo des données;Backlog;0;0;0;Build;Octopus
+AUTOMATISER;AUT-467;AP Météoflex open data - développements;Backlog;7;7;0;;Autopilot
+AUTOMATISER;AUT-501;RUN - Automatiser;Backlog;25;20;5;;Autopilot
+AUTOMATISER;AUT-503;Fusion TVS/Streaming : dev AP PSL;Backlog;9;9;0;;Autopilot
+ENGAGER;ENG-151;Recommandation de contenus dans Braze;En cours;10;8;0;;Marketing automation
+ENGAGER;ENG-152;Réengager les utilisateurs J+90;En cours;8;3;0;;Marketing automation
+ENGAGER;ENG-153;Créer les dashboards;En cours;0;0;0;;Marketing automation
+ENGAGER;ENG-155;Intégrer les données pour le NBA dans Braze;En cours;1;0;1;;Marketing automation
+ENGAGER;ENG-161;Synchronisation des catalogues Braze;En cours;3;1;0;Run;Marketing automation
+ENGAGER;ENG-162;TF1 Info - Segmentation dynamique;En cours;16;14;1;;Marketing automation
+ENGAGER;ENG-166;TF1 info - Elections municipales;En cours;2;2;0;Build;Marketing automation
+ENGAGER;ENG-167;PAY & Premium - Réengagement des utilisateurs;Terminé;2;2;0;Run;Marketing automation
+ENGAGER;ENG-168;RUN TF1 Info;En cours;3;1;0;Run;RUN
+ENGAGER;ENG-169;RUN TF1+;En cours;6;6;0;Run;RUN
+ENGAGER;ENG-190;RUN - Evolutions Braze;En cours;7;6;1;;Marketing automation
+ENGAGER;ENG-200;Tempo - Temps non productif;En cours;2;0;0;Run;SSO
+ENGAGER;ENG-204;Cadrage SSO Lot 2;A cadrer;3;2;1;Build;SSO
+EXPOSER;DE-143;[Mesure] Evol dashboard PAD - Q1-Q32025;Terminé;0;0;0;;Dashboarding
+EXPOSER;DE-160;Faire évoluer le dashboard TF1+ pour l'équipe Distribution;A cadrer;8;1;0;;Dashboarding
+EXPOSER;DE-291;Relier les signaux d'affinité Amazon aux programmes TF1;A cadrer;2;0;0;Build;Graph ID​
+EXPOSER;DE-292;Enrichir GraphID avec les données de Micro Paiement;En cours;1;1;0;Build;Graph ID​
+EXPOSER;DE-293;APA : Optimiser la version pour les commerciaux et traiter les retours;Backlog;6;3;0;Build;Graph ID​
+EXPOSER;DE-295;APA x TAM V1 : Mettre en place des KPIs génériques dans TAM;En cours;10;1;0;Build;Graph ID​
+EXPOSER;DE-298;Le Hub x TAM V1 : mettre en place des flux de création de fichiers;Backlog;0;0;0;Build;Graph ID​
+EXPOSER;DE-301;Migrer les 5 vues du dashboard TechOps du Tableau vers PowerBI;A cadrer;10;0;0;;Dashboarding
+EXPOSER;DE-302;Faire évoluer le dashboard Pilotage de la diffusion;A cadrer;4;0;0;;Dashboarding
+EXPOSER;DE-303;Ajouter l'onglet 4 : Export pour le dashboard Survaleur;A cadrer;6;2;1;;Dashboarding
+EXPOSER;DE-304;Migrer les 3 vues du dashboard Yield du Tableau vers PowerBI;A cadrer;3;3;0;;Dashboarding
+EXPOSER;DE-305;Optimiser la consommation de ressources des dashboards Power BI;A cadrer;0;0;0;;Dashboarding
+EXPOSER;DE-306;Mettre en place un système d'alerting sur le dashboard TF1+ et Pilotage de la diffusion;A cadrer;1;1;0;;Dashboarding
+EXPOSER;DE-307;Migration scripts & Monitorer la data quality GraphID via DBT;A cadrer;6;0;0;;Graph ID​
+EXPOSER;DE-315;Exposer RUN;Backlog;42;36;0;;Dashboarding,Graph ID​,Portail Data​
+EXPOSER;DE-343;Enrichir GraphID avec les données Réseaux Sociaux;Backlog;1;0;0;Build;Graph ID​
+IAML;DI-41;Finaliser la migration vers les tables RBAC;En cours;0;0;0;;Run
+IAML;DI-63;Intégration et industrialisation de la lib-connector dans tous les repository;En cours;19;10;0;;ML Plateform
+IAML;DI-71;Améliorer l'architecture & le modeling de nos modèles de recommandation - Lot 1;En cours;3;0;0;;Algo de reco
+IAML;DI-497;Enrichir les données "quick win" pour la recommandation et A/B tester Lot 1;En cours;8;5;1;Build;Algo de reco
+IAML;DI-624;Développer une mémoire dynamique pondérant court / moyen / long terme pour améliorer la pertinence des recommandations et A/B tester;A cadrer;5;0;0;Build;Algo de reco
+IAML;DI-625;MVP du modèle et pipeline One Target pour Netflix;En cours;2;1;0;Build;Algo de ciblage
+IAML;DI-628;Industrialiser le modèle et pipeline One Target pour Netflix;A cadrer;11;0;2;Build;Algo de ciblage
+IAML;DI-703;Explicabilité du modèle NCF;En cours;8;4;3;;Algo de reco
+IAML;DI-704;Enrichir les données "quick win" pour la recommandation et A/B tester Lot 2;A Faire;5;0;0;Build;Algo de reco
+IAML;DI-745;POC Astronomer;A Faire;6;2;0;Build;ML Plateform
+IAML;DI-746;Mettre en place le monitoring Datadog;A Faire;5;0;0;Build;ML Plateform
+IAML;DI-747;Finaliser et muscler notre capacité à analyser nos A/B tests;En cours;4;2;1;Build;ML Plateform
+IAML;DI-748;lib-dev-utils;A cadrer;0;0;0;Build;ML Plateform
+IAML;DI-766;Lib One Target / One Target V2;En cours;24;10;2;Build;Algo de ciblage
+MONETISER;DM-438;Netflix - Segmentation déterministe;Backlog;3;1;1;;Netflix
+MONETISER;DM-439;Citron TRE;Backlog;20;17;0;;Citron
+MONETISER;DM-440;Migration Audience Manager;Backlog;14;11;2;;Audiences Freewheel
+MONETISER;DM-441;- Cadrage CDP Composable - Discovery;Backlog;0;0;0;;Customer Data Platform
+MONETISER;DM-442;Référentiel des cibles;Backlog;12;9;1;;Reco cibles
+MONETISER;DM-443;Optimisation socio démo : lot 1 des tests;En cours;0;0;0;;Audiences Freewheel
+MONETISER;DM-445;Thematik by AI sur content TF1 Info;Backlog;4;1;0;;Thematik by IA
+MONETISER;DM-465;RUN - Monétiser;Backlog;14;14;0;;Autres
+MONETISER;DM-481;Midtail - Enrichissement SIREN;Backlog;0;0;0;Build;Autres
+MONETISER;DM-511;NETFLIX - Adapation code;Backlog;2;1;0;Build;Netflix
+STACK DATA;DSD-1205;[Jira CMDB] - MVP;Backlog;0;0;0;Build;Data plateform
+STACK DATA;DSD-1960;- Refonte des droits d'accès sur la plateforme Datech;En cours;5;4;0;Build;Data plateform
+STACK DATA;DSD-1962;- Revue Audit CI/CD;En cours;0;0;0;Build;Autres
+STACK DATA;DSD-1963;- Améliorer la sécurité de la plateforme Azure;En cours;2;0;1;;Autres
+STACK DATA;DSD-1994;- Implementation Cnapp Wiz;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-1995;- Amélioration de la sécurité et les performances de la CI/CD;En cours;5;5;0;Build;Data plateform
+STACK DATA;DSD-2068;- Cadrage Plateforme Composable;En cours;3;0;1;;
+STACK DATA;DSD-2084;[Netflix] - Infrastructure;En cours;4;2;1;Build;Data plateform
+STACK DATA;DSD-2086;- Optimisation FINOPS Infra;En cours;2;1;1;Build;Data plateform
+STACK DATA;DSD-2087;- Bascule Mode Authentification Snowflake;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2088;- Pricing Dynamic;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2091;- Infrastructure Stack Catchr;A Faire;1;0;0;Build;Data plateform
+STACK DATA;DSD-2131;- Purges des données Snowflake;En cours;1;0;1;;Data plateform
+STACK DATA;DSD-2132;- RAW-TO-INT;En cours;1;0;0;Build;Data plateform
+STACK DATA;DSD-2133;[Snowflake] - FinOps;En cours;6;4;2;;Data plateform
+STACK DATA;DSD-2134;- Masking des données Snowflake;En cours;1;1;0;Build;Data plateform
+STACK DATA;DSD-2135;[Citron Tre] - Infrastructure Stack;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2211;[AP Perf DTW] - Infra Stack;En cours;1;1;0;Build;Data plateform
+STACK DATA;DSD-2245;[AP Perf DTS] - Infra Stack;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2258;[Snowflake] - Amelioration Continue;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2311;[Snowflake] - MCO/RUN;En cours;10;8;1;Run;Data plateform
+STACK DATA;DSD-2349;- Agentic AI Framework;En cours;7;5;1;Build;Data plateform
+STACK DATA;DSD-2350;[Data PlateForme] - MCO / RUN;En cours;28;15;7;Run;Data plateform
+STACK DATA;DSD-2354;[APA] - Stack Data;En cours;1;1;0;;Data plateform
+STACK DATA;DSD-2355;[Datadog] - migration et mise en place du monitoring avec Datadog;En cours;2;1;1;Build;Data plateform
+STACK DATA;DSD-2380;[DBT] - INFRA;En cours;2;1;0;Run;Data plateform
+STACK DATA;DSD-2393;- Corriger les écarts (code-prod) terraform;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2433;[Terraform] - Mise en place Matrice Terraform Snowflake avec le provider à jour;En cours;0;0;0;Build;Data plateform
+STACK DATA;DSD-2680;- Exposition Catalogue;En cours;0;0;0;Build;Autres
+STACK DATA;DSD-2681;[Reco] - Optimisation des reco tf1+;En cours;1;1;0;;Autres
+STACK DATA;DSD-2682;[Databricks] - RUN / MCO;En cours;0;0;0;Run;Data plateform
+STACK DATA;DSD-2729;- Github Copilot;Backlog;6;3;0;Build;Autres
+STACK DATA;DSD-2739;- POC Astronomer;En cours;11;9;0;Build;Data plateform

@@ -1,9 +1,11 @@
 import { parseCSV, readFile } from './csv-parser.js';
-import { renderNavTabs, renderContent } from './render.js';
+import { renderNavTabs, renderContent, attachFilterListeners, updateTabBadge } from './render.js';
 
 // State
 let data = [];
 let teams = [];
+let products = [];
+export let teamFilters = {}; // { teamName: 'all' | 'build' | 'run' }
 
 // DOM elements
 const uploadZone = document.getElementById('uploadZone');
@@ -53,6 +55,9 @@ async function processFile(file) {
     const result = parseCSV(csvText);
     data = result.data;
     teams = result.teams;
+    products = result.products;
+    // Initialize filters to 'build' by default
+    teams.forEach(t => teamFilters[t] = 'build');
     render();
 }
 
@@ -61,7 +66,7 @@ function render() {
     extractionInfo.textContent = `${data.length} Epics chargées pour ${teams.length} équipes — ${new Date().toLocaleDateString('fr-FR')}`;
 
     navTabs.classList.remove('hidden');
-    navTabs.innerHTML = renderNavTabs(teams, data);
+    navTabs.innerHTML = renderNavTabs(teams, data, teamFilters);
 
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.addEventListener('click', () => {
@@ -71,7 +76,8 @@ function render() {
         });
     });
 
-    content.innerHTML = renderContent(teams, data);
+    content.innerHTML = renderContent(teams, data, teamFilters);
+    attachFilterListeners(teams, data, teamFilters);
     showTab('global');
 }
 

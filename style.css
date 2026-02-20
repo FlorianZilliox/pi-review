@@ -345,8 +345,8 @@ h1 {
 
 .epics-table-header {
     display: grid;
-    grid-template-columns: 100px 1fr 120px 180px 60px;
-    gap: 1rem;
+    grid-template-columns: 90px 1fr 100px 150px 120px 50px;
+    gap: 0.75rem;
     padding: 0.75rem 1rem;
     background: var(--bg-header);
     color: var(--text-light);
@@ -356,11 +356,40 @@ h1 {
 
 .epic-row {
     display: grid;
-    grid-template-columns: 100px 1fr 120px 180px 60px;
-    gap: 1rem;
+    grid-template-columns: 90px 1fr 100px 150px 120px 50px;
+    gap: 0.75rem;
     padding: 1rem;
     border-bottom: 1px solid var(--border);
     align-items: center;
+}
+
+/* Type badge (Build/Run) */
+.type-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.type-badge.build {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.type-badge.run {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+/* Composant text */
+.composant-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .epic-row:last-child {

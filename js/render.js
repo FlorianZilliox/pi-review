@@ -1,11 +1,28 @@
 import { categorizeStatus, getStatusClass } from './utils.js';
 import { getTeamMetrics, getTeamAlert, getEpicAttention, getProgressBarColor } from './metrics.js';
 
-export function renderNavTabs(teams, data) {
+// Helper to filter team data based on Build/Run filter
+export function getFilteredTeamData(team, data, teamFilters) {
+    const filter = teamFilters[team] || 'build';
+    let teamData = data.filter(d => d.equipe === team);
+
+    if (filter === 'build') {
+        // Build = explicitement Build OU vide (non classé)
+        teamData = teamData.filter(d => d.type.toLowerCase() !== 'run');
+    } else if (filter === 'run') {
+        teamData = teamData.filter(d => d.type.toLowerCase() === 'run');
+    }
+    // 'all' = pas de filtre
+
+    return teamData;
+}
+
+export function renderNavTabs(teams, data, teamFilters) {
     return `
         <div class="nav-tab active" data-tab="global">Vue globale</div>
+        <div class="nav-tab" data-tab="products">Par Produit</div>
         ${teams.map(team => {
-            const teamData = data.filter(d => d.equipe === team);
+            const teamData = getFilteredTeamData(team, data, teamFilters);
             const alert = getTeamAlert(teamData);
             return `
                 <div class="nav-tab" data-tab="${team}">
@@ -17,42 +34,97 @@ export function renderNavTabs(teams, data) {
     `;
 }
 
-export function renderContent(teams, data) {
+export function renderContent(teams, data, teamFilters) {
     return `
         <div class="team-section" id="tab-global">
-            ${renderGlobalView(teams, data)}
+            ${renderGlobalView(teams, data, teamFilters)}
+        </div>
+        <div class="team-section" id="tab-products">
+            ${renderProductsView(data)}
         </div>
         ${teams.map(team => `
             <div class="team-section" id="tab-${team}">
-                ${renderTeamView(team, data)}
+                ${renderTeamView(team, data, teamFilters)}
             </div>
         `).join('')}
     `;
 }
 
-function renderGlobalView(teams, data) {
+export function attachFilterListeners(teams, data, teamFilters) {
+    document.querySelectorAll('.filter-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const team = e.target.dataset.team;
+            teamFilters[team] = e.target.value;
+            // Re-render just this team section
+            const section = document.getElementById(`tab-${team}`);
+            if (section) {
+                section.innerHTML = renderTeamView(team, data, teamFilters);
+                // Re-attach filter listener for this section
+                const newSelect = section.querySelector('.filter-select');
+                if (newSelect) {
+                    newSelect.addEventListener('change', (e) => {
+                        teamFilters[team] = e.target.value;
+                        section.innerHTML = renderTeamView(team, data, teamFilters);
+                        attachSingleFilterListener(section, team, data, teamFilters);
+                    });
+                }
+            }
+            // Update tab badge
+            updateTabBadge(team, data, teamFilters);
+        });
+    });
+}
+
+function attachSingleFilterListener(section, team, data, teamFilters) {
+    const select = section.querySelector('.filter-select');
+    if (select) {
+        select.addEventListener('change', (e) => {
+            teamFilters[team] = e.target.value;
+            section.innerHTML = renderTeamView(team, data, teamFilters);
+            attachSingleFilterListener(section, team, data, teamFilters);
+            updateTabBadge(team, data, teamFilters);
+        });
+    }
+}
+
+export function updateTabBadge(team, data, teamFilters) {
+    const teamData = getFilteredTeamData(team, data, teamFilters);
+    const alert = getTeamAlert(teamData);
+    const tab = document.querySelector(`.nav-tab[data-tab="${team}"] .alert-badge`);
+    if (tab) {
+        tab.className = `alert-badge ${alert}`;
+    }
+}
+
+function renderGlobalView(teams, data, teamFilters) {
+    // Global view uses BUILD filter (excludes Run)
     const globalStats = teams.map(team => {
-        const teamData = data.filter(d => d.equipe === team);
+        const teamData = getFilteredTeamData(team, data, teamFilters);
         const metrics = getTeamMetrics(teamData);
+        const allData = data.filter(d => d.equipe === team);
+        const runCount = allData.filter(d => d.type.toLowerCase() === 'run').length;
         return {
             team,
             ...metrics,
-            alert: getTeamAlert(teamData)
+            alert: getTeamAlert(teamData),
+            runCount
         };
     });
 
     return `
+        <div class="info-box" style="margin-bottom: 1rem;">
+            <div class="info-box-content">Vue Build uniquement (hors Run). Le Run est du flux continu, non pertinent pour la complétion mid-PI.</div>
+        </div>
         <h3 style="margin-bottom: 1rem;">Vue consolidée par équipe</h3>
         <table class="global-table">
             <thead>
                 <tr>
                     <th>Équipe</th>
                     <th>Epics</th>
-                    <th>Actives</th>
+                    <th>Terminées</th>
+                    <th>En cours</th>
+                    <th>Non démarrées</th>
                     <th>À cadrer</th>
-                    <th>Tickets Done</th>
-                    <th>% Tickets</th>
-                    <th>% Actives</th>
                     <th>Alerte</th>
                 </tr>
             </thead>
@@ -60,12 +132,11 @@ function renderGlobalView(teams, data) {
                 ${globalStats.map(s => `
                     <tr>
                         <td><strong>${s.team}</strong></td>
-                        <td>${s.totalEpics}</td>
-                        <td>${s.termine + s.enCours}</td>
-                        <td>${s.aCadrer}</td>
-                        <td>${s.doneTickets}/${s.totalTickets}</td>
-                        <td>${Math.round(s.pctTicketsDone)}%</td>
-                        <td>${Math.round(s.pctEpicsActives)}%</td>
+                        <td>${s.totalEpics} <span style="color: var(--text-secondary); font-size: 0.8rem;">(+${s.runCount} run)</span></td>
+                        <td><strong style="color: var(--status-done);">${s.termine}</strong> <span style="color: var(--text-secondary); font-size: 0.8rem;">(${Math.round(s.pctEpicsTerminees)}%)</span></td>
+                        <td>${s.enCours} <span style="color: var(--text-secondary); font-size: 0.8rem;">(${Math.round(s.pctEpicsEnCours)}%)</span></td>
+                        <td>${s.nonDemarrees} <span style="color: var(--text-secondary); font-size: 0.8rem;">(${Math.round(s.pctNonDemarrees)}%)</span></td>
+                        <td>${s.aCadrer > 0 ? `<span style="color: var(--indicator-orange);">${s.aCadrer}</span>` : '0'}</td>
                         <td><span class="indicator ${s.alert}"></span></td>
                     </tr>
                 `).join('')}
@@ -74,10 +145,86 @@ function renderGlobalView(teams, data) {
     `;
 }
 
-function renderTeamView(team, data) {
-    const teamData = data.filter(d => d.equipe === team);
+function renderProductsView(data) {
+    // Group epics by product (composant), cross-team
+    const productStats = {};
+
+    data.forEach(d => {
+        if (!d.composant) return;
+        // Handle multiple components separated by comma
+        const comps = d.composant.split(',').map(c => c.trim());
+        comps.forEach(comp => {
+            if (!productStats[comp]) {
+                productStats[comp] = { epics: [], teams: new Set() };
+            }
+            productStats[comp].epics.push(d);
+            productStats[comp].teams.add(d.equipe);
+        });
+    });
+
+    const sortedProducts = Object.keys(productStats).sort();
+
+    return `
+        <h3 style="margin-bottom: 1rem;">Vue par Produit (cross-équipes)</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            Agrégation par composant Jira. Permet de voir la santé d'un produit indépendamment de l'équipe qui le porte.
+        </p>
+        <table class="global-table">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Équipes</th>
+                    <th>Epics</th>
+                    <th>Terminées</th>
+                    <th>En cours</th>
+                    <th>Tickets Done</th>
+                    <th>% Complétion</th>
+                    <th>Alerte</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${sortedProducts.map(prod => {
+                    const epics = productStats[prod].epics;
+                    const teamsStr = [...productStats[prod].teams].join(', ');
+                    const total = epics.length;
+                    const termine = epics.filter(d => categorizeStatus(d.statut) === 'termine').length;
+                    const enCours = epics.filter(d => categorizeStatus(d.statut) === 'enCours').length;
+                    const totalTickets = epics.reduce((sum, d) => sum + d.total, 0);
+                    const doneTickets = epics.reduce((sum, d) => sum + d.done, 0);
+                    const pct = totalTickets > 0 ? Math.round((doneTickets / totalTickets) * 100) : 0;
+
+                    // Alert logic for product
+                    let alert = 'green';
+                    if (pct < 30) alert = 'red';
+                    else if (pct < 50) alert = 'orange';
+
+                    return `
+                        <tr>
+                            <td><strong>${prod}</strong></td>
+                            <td style="font-size: 0.8rem; color: var(--text-secondary);">${teamsStr}</td>
+                            <td>${total}</td>
+                            <td>${termine}</td>
+                            <td>${enCours}</td>
+                            <td>${doneTickets}/${totalTickets}</td>
+                            <td>${pct}%</td>
+                            <td><span class="indicator ${alert}"></span></td>
+                        </tr>
+                    `;
+                }).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+function renderTeamView(team, data, teamFilters) {
+    const currentFilter = teamFilters[team] || 'build';
+    const teamData = getFilteredTeamData(team, data, teamFilters);
+    const allTeamData = data.filter(d => d.equipe === team);
     const metrics = getTeamMetrics(teamData);
     const teamAlert = getTeamAlert(teamData);
+
+    const runCount = allTeamData.filter(d => d.type.toLowerCase() === 'run').length;
+    const buildCount = allTeamData.filter(d => d.type.toLowerCase() !== 'run').length;
 
     const sortedData = [...teamData].sort((a, b) => {
         const order = { 'enCours': 0, 'aCadrer': 1, 'aFaire': 2, 'termine': 3 };
@@ -86,20 +233,36 @@ function renderTeamView(team, data) {
 
     return `
         <div class="team-header">
-            <div class="team-name">${team} <span class="indicator ${teamAlert}" style="display: inline-block; vertical-align: middle;"></span></div>
-            <div class="team-meta">Date d'extraction : ${new Date().toLocaleDateString('fr-FR')}</div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <div class="team-name">${team} <span class="indicator ${teamAlert}" style="display: inline-block; vertical-align: middle;"></span></div>
+                    <div class="team-meta">Date d'extraction : ${new Date().toLocaleDateString('fr-FR')}</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary);">Afficher :</label>
+                    <select class="filter-select" data-team="${team}" style="padding: 0.4rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; cursor: pointer;">
+                        <option value="build" ${currentFilter === 'build' ? 'selected' : ''}>Build (${buildCount})</option>
+                        <option value="run" ${currentFilter === 'run' ? 'selected' : ''}>Run (${runCount})</option>
+                        <option value="all" ${currentFilter === 'all' ? 'selected' : ''}>Tout (${allTeamData.length})</option>
+                    </select>
+                </div>
+            </div>
             <div class="team-metrics">
                 <div class="team-metric">
-                    <span>% Tickets Done :</span>
-                    <span class="team-metric-value">${Math.round(metrics.pctTicketsDone)}%</span>
+                    <span>Terminées :</span>
+                    <span class="team-metric-value">${metrics.termine}/${metrics.totalEpics} (${Math.round(metrics.pctEpicsTerminees)}%)</span>
                 </div>
                 <div class="team-metric">
-                    <span>% Epics actives :</span>
-                    <span class="team-metric-value">${Math.round(metrics.pctEpicsActives)}%</span>
+                    <span>En cours :</span>
+                    <span class="team-metric-value">${metrics.enCours} (${Math.round(metrics.pctEpicsEnCours)}%)</span>
                 </div>
                 <div class="team-metric">
-                    <span>% À cadrer :</span>
-                    <span class="team-metric-value">${Math.round(metrics.pctACadrer)}%</span>
+                    <span>Non démarrées :</span>
+                    <span class="team-metric-value">${metrics.nonDemarrees} (${Math.round(metrics.pctNonDemarrees)}%)</span>
+                </div>
+                <div class="team-metric">
+                    <span>À cadrer :</span>
+                    <span class="team-metric-value">${metrics.aCadrer}</span>
                 </div>
             </div>
         </div>
@@ -131,6 +294,7 @@ function renderTeamView(team, data) {
                     <div>Titre</div>
                     <div>Statut</div>
                     <div>Complétion</div>
+                    <div>Produit</div>
                     <div></div>
                 </div>
                 ${sortedData.map(d => renderEpicRow(d)).join('')}
@@ -143,11 +307,15 @@ function renderEpicRow(d) {
     const pct = d.total > 0 ? Math.round((d.done / d.total) * 100) : 0;
     const attention = getEpicAttention(d);
     const barColor = getProgressBarColor(d);
+    const typeClass = d.type.toLowerCase() === 'run' ? 'run' : (d.type.toLowerCase() === 'build' ? 'build' : '');
 
     return `
         <div class="epic-row ${attention.alert ? 'highlight' : ''}">
             <div class="epic-key">${d.epic}</div>
-            <div class="epic-title">${d.titre}</div>
+            <div class="epic-title">
+                ${d.titre}
+                ${d.type ? `<span class="type-badge ${typeClass}">${d.type}</span>` : ''}
+            </div>
             <div>
                 <span class="status-badge ${getStatusClass(d.statut)}">${d.statut}</span>
             </div>
@@ -159,6 +327,7 @@ function renderEpicRow(d) {
                     </div>
                 ` : '<span class="progress-text">—</span>'}
             </div>
+            <div class="composant-text" title="${d.composant}">${d.composant || '—'}</div>
             <div>
                 ${attention.alert ? `<span class="indicator ${attention.color}"></span>` : '<span class="indicator none"></span>'}
             </div>

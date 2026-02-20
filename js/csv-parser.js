@@ -12,13 +12,16 @@ export function parseCSV(csvText) {
                 statut: values[3],
                 total: parseInt(values[4]) || 0,
                 done: parseInt(values[5]) || 0,
-                enCours: parseInt(values[6]) || 0
+                enCours: parseInt(values[6]) || 0,
+                type: values[7] || '',
+                composant: values[8] || ''
             });
         }
     }
 
     const teams = [...new Set(data.map(d => d.equipe))];
-    return { data, teams };
+    const products = [...new Set(data.filter(d => d.composant).map(d => d.composant))].sort();
+    return { data, teams, products };
 }
 
 export function readFile(file) {
