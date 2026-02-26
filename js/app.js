@@ -1,5 +1,5 @@
 import { parseCSV, readFile } from './csv-parser.js';
-import { renderNavTabs, renderContent, attachFilterListeners, updateTabBadge } from './render.js';
+import { renderNavTabs, renderContent, attachFilterListeners, updateTabBadge, attachProductsSortListeners } from './render.js';
 
 // State
 let data = [];
@@ -78,6 +78,7 @@ function render() {
 
     content.innerHTML = renderContent(teams, data, teamFilters);
     attachFilterListeners(teams, data, teamFilters);
+    attachProductsSortListeners(data);
     showTab('global');
 }
 

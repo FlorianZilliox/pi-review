@@ -43,8 +43,8 @@ export function getTeamAlert(teamData) {
 
     // ORANGE: Peu de livraison OU beaucoup de non démarrées
     // - < 10% terminées (on n'a presque rien livré)
-    // - > 40% non démarrées (trop d'epics en attente)
-    if (pctEpicsTerminees < 10 || pctNonDemarrees > 40) {
+    // - > 32% non démarrées (trop d'epics en attente à mi-PI)
+    if (pctEpicsTerminees < 10 || pctNonDemarrees > 32) {
         return 'orange';
     }
 

@@ -22,8 +22,9 @@ export function renderNavTabs(teams, data, teamFilters) {
         <div class="nav-tab active" data-tab="global">Vue globale</div>
         <div class="nav-tab" data-tab="products">Par Produit</div>
         ${teams.map(team => {
-            const teamData = getFilteredTeamData(team, data, teamFilters);
-            const alert = getTeamAlert(teamData);
+            // Badge toujours basé sur TOUTES les données (pas le filtre actif)
+            const allTeamData = data.filter(d => d.equipe === team);
+            const alert = getTeamAlert(allTeamData);
             return `
                 <div class="nav-tab" data-tab="${team}">
                     ${team}
@@ -88,8 +89,9 @@ function attachSingleFilterListener(section, team, data, teamFilters) {
 }
 
 export function updateTabBadge(team, data, teamFilters) {
-    const teamData = getFilteredTeamData(team, data, teamFilters);
-    const alert = getTeamAlert(teamData);
+    // Badge toujours basé sur TOUTES les données (pas le filtre actif)
+    const allTeamData = data.filter(d => d.equipe === team);
+    const alert = getTeamAlert(allTeamData);
     const tab = document.querySelector(`.nav-tab[data-tab="${team}"] .alert-badge`);
     if (tab) {
         tab.className = `alert-badge ${alert}`;
@@ -145,13 +147,15 @@ function renderGlobalView(teams, data, teamFilters) {
     `;
 }
 
-function renderProductsView(data) {
-    // Group epics by product (composant), cross-team
+// State for products table sorting
+let productsSortColumn = 'produit';
+let productsSortAsc = true;
+
+function getProductsData(data) {
     const productStats = {};
 
     data.forEach(d => {
         if (!d.composant) return;
-        // Handle multiple components separated by comma
         const comps = d.composant.split(',').map(c => c.trim());
         comps.forEach(comp => {
             if (!productStats[comp]) {
@@ -162,58 +166,111 @@ function renderProductsView(data) {
         });
     });
 
-    const sortedProducts = Object.keys(productStats).sort();
+    return Object.keys(productStats).map(prod => {
+        const epics = productStats[prod].epics;
+        const teamsStr = [...productStats[prod].teams].join(', ');
+        const total = epics.length;
+        const termine = epics.filter(d => categorizeStatus(d.statut) === 'termine').length;
+        const enCours = epics.filter(d => categorizeStatus(d.statut) === 'enCours').length;
+        const totalTickets = epics.reduce((sum, d) => sum + d.total, 0);
+        const doneTickets = epics.reduce((sum, d) => sum + d.done, 0);
+        const pct = totalTickets > 0 ? Math.round((doneTickets / totalTickets) * 100) : 0;
+
+        let alert = 'green';
+        if (pct < 30) alert = 'red';
+        else if (pct < 50) alert = 'orange';
+        const alertOrder = { red: 0, orange: 1, green: 2 };
+
+        return { prod, teamsStr, total, termine, enCours, totalTickets, doneTickets, pct, alert, alertOrder: alertOrder[alert] };
+    });
+}
+
+function sortProductsData(productsData) {
+    const sorted = [...productsData];
+    sorted.sort((a, b) => {
+        let valA, valB;
+        switch (productsSortColumn) {
+            case 'produit': valA = a.prod.toLowerCase(); valB = b.prod.toLowerCase(); break;
+            case 'equipes': valA = a.teamsStr.toLowerCase(); valB = b.teamsStr.toLowerCase(); break;
+            case 'epics': valA = a.total; valB = b.total; break;
+            case 'terminees': valA = a.termine; valB = b.termine; break;
+            case 'encours': valA = a.enCours; valB = b.enCours; break;
+            case 'tickets': valA = a.doneTickets; valB = b.doneTickets; break;
+            case 'completion': valA = a.pct; valB = b.pct; break;
+            case 'alerte': valA = a.alertOrder; valB = b.alertOrder; break;
+            default: valA = a.prod.toLowerCase(); valB = b.prod.toLowerCase();
+        }
+        if (valA < valB) return productsSortAsc ? -1 : 1;
+        if (valA > valB) return productsSortAsc ? 1 : -1;
+        return 0;
+    });
+    return sorted;
+}
+
+function renderProductsView(data) {
+    const productsData = sortProductsData(getProductsData(data));
+
+    const sortIndicator = (col) => {
+        if (productsSortColumn === col) {
+            return productsSortAsc ? ' ▲' : ' ▼';
+        }
+        return '';
+    };
 
     return `
         <h3 style="margin-bottom: 1rem;">Vue par Produit (cross-équipes)</h3>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
-            Agrégation par composant Jira. Permet de voir la santé d'un produit indépendamment de l'équipe qui le porte.
+            Agrégation par composant Jira. Cliquer sur un en-tête pour trier.
         </p>
-        <table class="global-table">
+        <table class="global-table" id="products-table">
             <thead>
                 <tr>
-                    <th>Produit</th>
-                    <th>Équipes</th>
-                    <th>Epics</th>
-                    <th>Terminées</th>
-                    <th>En cours</th>
-                    <th>Tickets Done</th>
-                    <th>% Complétion</th>
-                    <th>Alerte</th>
+                    <th class="sortable" data-sort="produit" style="cursor: pointer;">Produit${sortIndicator('produit')}</th>
+                    <th class="sortable" data-sort="equipes" style="cursor: pointer;">Équipes${sortIndicator('equipes')}</th>
+                    <th class="sortable" data-sort="epics" style="cursor: pointer;">Epics${sortIndicator('epics')}</th>
+                    <th class="sortable" data-sort="terminees" style="cursor: pointer;">Terminées${sortIndicator('terminees')}</th>
+                    <th class="sortable" data-sort="encours" style="cursor: pointer;">En cours${sortIndicator('encours')}</th>
+                    <th class="sortable" data-sort="tickets" style="cursor: pointer;">Tickets Done${sortIndicator('tickets')}</th>
+                    <th class="sortable" data-sort="completion" style="cursor: pointer;">% Complétion${sortIndicator('completion')}</th>
+                    <th class="sortable" data-sort="alerte" style="cursor: pointer;">Alerte${sortIndicator('alerte')}</th>
                 </tr>
             </thead>
             <tbody>
-                ${sortedProducts.map(prod => {
-                    const epics = productStats[prod].epics;
-                    const teamsStr = [...productStats[prod].teams].join(', ');
-                    const total = epics.length;
-                    const termine = epics.filter(d => categorizeStatus(d.statut) === 'termine').length;
-                    const enCours = epics.filter(d => categorizeStatus(d.statut) === 'enCours').length;
-                    const totalTickets = epics.reduce((sum, d) => sum + d.total, 0);
-                    const doneTickets = epics.reduce((sum, d) => sum + d.done, 0);
-                    const pct = totalTickets > 0 ? Math.round((doneTickets / totalTickets) * 100) : 0;
-
-                    // Alert logic for product
-                    let alert = 'green';
-                    if (pct < 30) alert = 'red';
-                    else if (pct < 50) alert = 'orange';
-
-                    return `
-                        <tr>
-                            <td><strong>${prod}</strong></td>
-                            <td style="font-size: 0.8rem; color: var(--text-secondary);">${teamsStr}</td>
-                            <td>${total}</td>
-                            <td>${termine}</td>
-                            <td>${enCours}</td>
-                            <td>${doneTickets}/${totalTickets}</td>
-                            <td>${pct}%</td>
-                            <td><span class="indicator ${alert}"></span></td>
-                        </tr>
-                    `;
-                }).join('')}
+                ${productsData.map(p => `
+                    <tr>
+                        <td><strong>${p.prod}</strong></td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">${p.teamsStr}</td>
+                        <td>${p.total}</td>
+                        <td>${p.termine}</td>
+                        <td>${p.enCours}</td>
+                        <td>${p.doneTickets}/${p.totalTickets}</td>
+                        <td>${p.pct}%</td>
+                        <td><span class="indicator ${p.alert}"></span></td>
+                    </tr>
+                `).join('')}
             </tbody>
         </table>
     `;
+}
+
+export function attachProductsSortListeners(data) {
+    document.querySelectorAll('#products-table .sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.dataset.sort;
+            if (productsSortColumn === col) {
+                productsSortAsc = !productsSortAsc;
+            } else {
+                productsSortColumn = col;
+                productsSortAsc = true;
+            }
+            // Re-render products view
+            const section = document.getElementById('tab-products');
+            if (section) {
+                section.innerHTML = renderProductsView(data);
+                attachProductsSortListeners(data);
+            }
+        });
+    });
 }
 
 function renderTeamView(team, data, teamFilters) {
@@ -221,7 +278,8 @@ function renderTeamView(team, data, teamFilters) {
     const teamData = getFilteredTeamData(team, data, teamFilters);
     const allTeamData = data.filter(d => d.equipe === team);
     const metrics = getTeamMetrics(teamData);
-    const teamAlert = getTeamAlert(teamData);
+    // Alerte toujours basée sur TOUTES les données (pas le filtre actif)
+    const teamAlert = getTeamAlert(allTeamData);
 
     const runCount = allTeamData.filter(d => d.type.toLowerCase() === 'run').length;
     const buildCount = allTeamData.filter(d => d.type.toLowerCase() !== 'run').length;

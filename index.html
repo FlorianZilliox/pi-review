@@ -570,7 +570,8 @@
             const teamData = getFilteredTeamData(team);
             const allTeamData = data.filter(d => d.equipe === team);
             const metrics = getTeamMetrics(teamData);
-            const teamAlert = getTeamAlert(teamData);
+            // Alerte toujours basée sur TOUTES les données (pas le filtre actif)
+            const teamAlert = getTeamAlert(allTeamData);
             const runCount = allTeamData.filter(d => d.type.toLowerCase() === 'run').length;
             const buildCount = allTeamData.filter(d => d.type.toLowerCase() !== 'run').length;
 
